@@ -173,4 +173,6 @@ ________________________________________________________________________________
 
 ## error
 Bug of Keras(2.1.1)??
+
+
 Layer lstm_4 was passed non-serializable keyword arguments: {'initial_state': [<tf.Tensor 'input_2:0' shape=(?, 256) dtype=float32>, <tf.Tensor 'input_3:0' shape=(?, 256) dtype=float32>]}. They will not be included in the serialized model (and thus will be missing at deserialization time).
