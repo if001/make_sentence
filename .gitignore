@@ -1,0 +1,17 @@
+build/*
+__pycache__
+
+aozora_text/files/*
+!aozora_text/files/.gitkeep
+aozora_text/zip/*
+!aozora_text/zip/.gitkeep
+
+nn/__pycache__
+nn/weight/*
+nn/weight/.gitkeep
+
+lib/__pycache__
+tflog/
+
+.DS_Store
+!.gitkeep
