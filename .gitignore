@@ -10,6 +10,8 @@ nn/__pycache__
 nn/weight/*
 nn/weight/.gitkeep
 
+lib/model/*
+!lib/model/.gitkeep
 lib/__pycache__
 tflog/
 
