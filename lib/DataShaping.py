@@ -1,13 +1,14 @@
 
 
 import numpy as np
-import lib
+from lib.StringOperation import StringOperation
+
 import random
 TMP_BUCKET = (10,15)
 
 class DataShaping():
     def __init__(self):
-        self.str_op = lib.StringOperation.StringOperation("load")
+        self.str_op = StringOperation("load")
 
     def select_random_sentens(self,word_lists):
         index = random.randint(0,len(word_lists)-2)
