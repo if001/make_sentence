@@ -170,9 +170,10 @@ ________________________________________________________________________________
 ```
 
 ## input format
-Input text  must be given in the form of In the form of leaving a space between words.
+Input text  must be given in the form of leaving a space between words.
 
 begin of sentence token : BOS
+
 end of sentence token : 。
 
 ```
@@ -184,6 +185,10 @@ BOS 私 に は その 心臓 が 、 大き さ に 相応 し た のろ さ �
 ```
 
 by running aozora_text/all_in_one.sh <args>, you can get the input sentence.
+
+example
+
+``./all_in_one.sh 1779 rnp``
 
 ## error
 Bug of Keras(2.1.1)??
