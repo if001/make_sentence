@@ -1,7 +1,7 @@
 ## run
 first, run script `python3 word2vec_trainer.py` to training word2vec.
 
-then, save word2vec weight to lib/model/text8.model
+this script save word2vec weight to lib/model/text8.model.
 
 It is possible to setting by editing lib/Conf.py.
 
