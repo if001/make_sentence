@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 
 from lib.Const import Const
 from lib.DataShaping import DataShaping
+from lib.StringOperation import StringOperation
 from nn.HRED import HRED
 
 
@@ -24,12 +25,12 @@ def make_sentens_vec(decoder_model, states_h, states_c, start_token, end_token):
 
     stop_condition = False
     while not stop_condition:
-        word_vec, h, c = decoder_model.predict([word_vec, states_h, states_c])
+        word_vec = decoder_model.predict([word_vec, states_h, states_c])
         sentens_vec.append(word_vec.reshape(len(start_token[0][0])))
-        states_value = [h, c]
-        if (np.allclose(word_vec, end_token) or len(sentens_vec) == 15 ):
+        if (np.allclose(word_vec, end_token) or len(sentens_vec) == 15):
             stop_condition = True
     return sentens_vec
+
 
 def get_word_lists(file_path):
     print("make wordlists")
@@ -37,7 +38,7 @@ def get_word_lists(file_path):
     wordlists = []
     for line in lines:
         wordlists.append(line.split(" "))
-    print("wordlist num:",len(wordlists))
+    print("wordlist num:", len(wordlists))
     return wordlists[:-1]
 
 
@@ -58,7 +59,7 @@ def training():
         decoder_model = hred.load_models('param_seq2seq_decoder.hdf5')
         context_h = hred.load_models('param_seq2seq_h.hdf5')
         context_c = hred.load_models('param_seq2seq_c.hdf5')
-    else :
+    else:
         encoder_model = hred.build_encoder()
         decoder_model = hred.build_decoder()
         context_h = hred.build_context_model()
@@ -69,18 +70,25 @@ def training():
         context_h = hred.model_compile(context_h)
         context_c = hred.model_compile(context_c)
 
-    autoencoder = hred.build_autoencoder(encoder_model, decoder_model, context_h, context_c)
+    autoencoder = hred.build_autoencoder(
+        encoder_model, decoder_model, context_h, context_c)
     autoencoder = hred.model_compile(autoencoder)
 
-    meta_hh = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_hc = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_ch = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_cc = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
+    meta_hh = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_hc = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_ch = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_cc = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
 
     for i in range(100000):
-        train_data, teach_data, teach_target_data = ds.make_data_seq(word_lists, Const.batch_size, i)
-        print("shape::",meta_cc.shape)
-        hist = hred.train_autoencoder(autoencoder, train_data, teach_data, teach_target_data, meta_hh, meta_hc, meta_ch, meta_cc)
+        train_data, teach_data, teach_target_data = ds.make_data_seq(
+            word_lists, Const.batch_size, i)
+        print("shape::", meta_cc.shape)
+        hist = hred.train_autoencoder(
+            autoencoder, train_data, teach_data, teach_target_data, meta_hh, meta_hc, meta_ch, meta_cc)
 
         state_h, state_c = encoder_model.predict(train_data)
         state_h = state_h.reshape(hred.batch_size, 1, hred.latent_dim)
@@ -98,17 +106,18 @@ def training():
 def make_sentens():
     word_lists = get_word_lists(Const.seq2seq_train_file)
 
-    ds = lib.DataShaping.DataShaping()
-    so = lib.StringOperation.StringOperation()
+    ds = DataShaping()
+    so = StringOperation()
 
     # load
-    hred = nn.HRED.HRED()
+    hred = HRED()
     encoder_model = hred.load_models('param_seq2seq_encoder.hdf5')
     decoder_model = hred.load_models('param_seq2seq_decoder.hdf5')
     context_h = hred.load_models('param_seq2seq_h.hdf5')
     context_c = hred.load_models('param_seq2seq_c.hdf5')
 
-    autoencoder = hred.build_autoencoder(encoder_model, decoder_model, context_h, context_c)
+    autoencoder = hred.build_autoencoder(
+        encoder_model, decoder_model, context_h, context_c)
     autoencoder = hred.model_compile(autoencoder)
 
     sentens1, sentens2 = ds.select_random_sentens(word_lists)
@@ -121,10 +130,14 @@ def make_sentens():
     sentens_vec_batch2 = np.array(sentens_vec_batch2)
 
     # make meta state value
-    meta_hh = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_hc = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_ch = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
-    meta_cc = np.array([[(random.randint(0, 10)/10) for i in range(hred.latent_dim)]])
+    meta_hh = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_hc = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_ch = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
+    meta_cc = np.array([[(random.randint(0, 10) / 10)
+                         for i in range(hred.latent_dim)]])
 
     state_h, state_c = encoder_model.predict(sentens_vec_batch1)
     state_h = state_h.reshape(hred.batch_size, 1, hred.latent_dim)
@@ -136,7 +149,7 @@ def make_sentens():
     print(sentens_vec_batch2.shape)
     state_h, state_c = encoder_model.predict(sentens_vec_batch2)
 
-    state_h= state_h.reshape(hred.batch_size, 1, hred.latent_dim)
+    state_h = state_h.reshape(hred.batch_size, 1, hred.latent_dim)
     state_h, _, _ = context_h.predict([state_h, meta_hh, meta_hc])
     state_h = np.array(state_h)
 
@@ -144,15 +157,16 @@ def make_sentens():
     state_c, _, _ = context_c.predict([state_c, meta_ch, meta_cc])
     state_c = np.array(state_c)
 
-
     # predict
     for _ in range(10):
         start_token = so.sentens_array_to_vec(["BOS"])
         start_token = np.array([start_token])
         end_token = so.sentens_array_to_vec(["。"])
         end_token = np.array([end_token])
-        decode_sentens_vec = make_sentens_vec(decoder_model, state_h, state_c, start_token, end_token)
-        decode_sentens_arr = so.sentens_vec_to_sentens_arr_prob(decode_sentens_vec)
+        decode_sentens_vec = make_sentens_vec(
+            decoder_model, state_h, state_c, start_token, end_token)
+        decode_sentens_arr = so.sentens_vec_to_sentens_arr_prob(
+            decode_sentens_vec)
         sentens = so.sentens_array_to_str(decode_sentens_arr)
         print(sentens)
         print("--")
@@ -163,6 +177,7 @@ def make_sentens():
         state_h = np.array(state_h)
         state_c = np.array(state_c)
 
+
 def main():
     if '--training' in sys.argv:
         training()
@@ -171,5 +186,6 @@ def main():
     else:
         print("invalid arg!!")
 
-if __name__ == "__main__" :
+
+if __name__ == "__main__":
     main()
