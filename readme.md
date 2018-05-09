@@ -2,14 +2,14 @@
 training
 
 ```
-python3 make_sentens.py -train
+python3 make_sentens.py -training
 ```
 
 
 resume training
 
 ```
-python3 make_sentens.py --train --resume
+python3 make_sentens.py --training --resume
 ```
 
 
@@ -169,7 +169,21 @@ Non-trainable params: 0
 __________________________________________________________________________________________________
 ```
 
+## input format
+Input text  must be given in the form of In the form of leaving a space between words.
 
+begin of sentence token : BOS
+end of sentence token : 。
+
+```
+BOS   部屋 の 四 周 に は 、 窓 や 入口 の ドア さえ 残さ ない で 、 天井 から 床 まで 、 真紅 な 重々しい 垂 絹 が 豊か な 襞 を 作っ て 懸け られ て い た 。
+BOS ロマンチック な 蝋燭 の 光 が 、 その 静脈 から 流れ出し た ばかり の 血 の 様 に も 、 ドス 黒い 色 を し た 垂 絹 の 表 に 、 我々 七 人 の 異様 に 大きな 影法師 を 投げ て い た 。
+BOS そして 、 その 影法師 は 、 蝋燭 の 焔 に つれ て 、 幾つ か の 巨大 な 昆虫 で も ある か の 様 に 、 垂 絹 の 襞 の 曲線 の 上 を 、 伸び たり 縮ん だり しながら 這い 歩い て い た 。
+BOS   いつも ながら その 部屋 は 、 私 を 、 丁度 とほう も なく 大きな 生物 の 心臓 の 中 に 坐っ て でも いる 様 な 気持 に し た 。
+BOS 私 に は その 心臓 が 、 大き さ に 相応 し た のろ さ を 以 て 、 ドキンドキン と 脈 うつ 音 さえ 感じ られる 様 に 思え た 。
+```
+
+by running aozora_text/all_in_one.sh <args>, you can get the input sentence.
 
 ## error
 Bug of Keras(2.1.1)??
